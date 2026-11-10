@@ -1,0 +1,8 @@
+---
+title: 'I Believe in Miracles...'
+description: 'I Believe in Miracles...'
+pubDate: 'Mar 10 2005'
+author: 'Thomas Gorgolione'
+---
+
+God showed me that miracles existed, and even more that some the seemingly crazy things that happen might not be so crazy. I still think that when miracles happen, they may need to be practical, but maybe there are just some times that I have no clue what the practicalities are. On Wednesday, I was in a bit of a jam. I was reading *Digging the Wells of Revival*, and I had a hard time accepting what the author was saying in terms of miracles. However, after Nyack Heritage class on Wednesday, which I believe was God's answer to my lukewarm response to miracles, I changed my view. The professor was talking about a man who went through a "crazy" miracle in Toronto at a conference our professor was at. This man was weeping and laughing alternating every minute for a few days. When our professor asked the pastor if the man was crazy, the pastor gave a very practical explaination. It was his guess that the man was crying at the things he held in, things that were long overdue, while his laugh was also very approptiate. As it turned out, the pastor was correct. The Holy Spirit was working through the man. Miracles, however crazy, can be done and are of God. I think we should take everything with a grain of salt if it gets too crazy, but miracles, even crazy miracles, should not be thrown out unless they are not coming from God. I also learned that I can be eager for spiritual gifts, which I think is really cool. However, in the end, I know my heart needs to be in the right place.

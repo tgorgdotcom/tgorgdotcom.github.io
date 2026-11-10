@@ -1,0 +1,26 @@
+---
+import HtmlHead from '../components/HtmlHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+    title: string;
+    description: string;
+	language?: string;
+}
+
+const { title, description, language = "en" } = Astro.props;
+---
+
+<!doctype html>
+<html lang={language}>
+    <HtmlHead title={title} description={description}>
+    </HtmlHead>
+    <body>
+        <Header />
+        <main id="content">
+            <slot />
+        </main>
+        <Footer />
+    </body>
+</html>

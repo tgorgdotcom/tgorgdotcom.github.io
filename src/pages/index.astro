@@ -1,0 +1,195 @@
+---
+import Base from '../layouts/Base.astro';
+import Image from 'astro/components/Image.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { getCollection, render } from 'astro:content';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+
+const getServiceDetails = (serviceCode: string): any => {
+	switch(serviceCode) {
+		case "youtube":
+			return {
+				name: "YouTube",
+				icon: {
+					viewbox: "0 0 28.57 20",
+					paths: "M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 2.24288e-07 14.285 0 14.285 0C14.285 0 5.35042 2.24288e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C2.24288e-07 5.35042 0 10 0 10C0 10 2.24288e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z"
+				},
+				color: "#FF0000"
+			};
+		case "x":
+			return {
+				name: "X",
+				icon: {
+					viewbox: "0 0 300 271",
+					paths: "m236 0h46l-101 115 118 156h-92.6l-72.5-94.8-83 94.8h-46l107-123-113-148h94.9l65.5 86.6zm-16.1 244h25.5l-165-218h-27.4z"
+				},
+				color: "#000000"
+			};
+		case "linkedin": 
+			return {
+				name: "LinkedIn",
+				icon: {
+					viewbox: "0 0 72 72",
+					paths: "M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z M62,62 L51.315625,62 L51.315625,43.8021149 C51.315625,38.8127542 49.4197917,36.0245323 45.4707031,36.0245323 C41.1746094,36.0245323 38.9300781,38.9261103 38.9300781,43.8021149 L38.9300781,62 L28.6333333,62 L28.6333333,27.3333333 L38.9300781,27.3333333 L38.9300781,32.0029283 C38.9300781,32.0029283 42.0260417,26.2742151 49.3825521,26.2742151 C56.7356771,26.2742151 62,30.7644705 62,40.051212 L62,62 Z M16.349349,22.7940133 C12.8420573,22.7940133 10,19.9296567 10,16.3970067 C10,12.8643566 12.8420573,10 16.349349,10 C19.8566406,10 22.6970052,12.8643566 22.6970052,16.3970067 C22.6970052,19.9296567 19.8566406,22.7940133 16.349349,22.7940133 Z M11.0325521,62 L21.769401,62 L21.769401,27.3333333 L11.0325521,27.3333333 L11.0325521,62 Z"
+				},
+				color: "#0A66C2"
+			}
+		case "thingiverse":
+			return {
+				name: "Thingiverse",
+				icon: {
+					viewbox: "0 0 32 32",
+					paths: "M31.0678 0H1.02914C0.460085 0 0 0.458781 0 1.02622V30.9798C0 31.5473 0.460085 32.006 1.02914 32.006H11.49C12.0591 32.006 12.5191 31.5473 12.5191 30.9798V13.0692C12.5191 12.9304 12.4041 12.8157 12.2649 12.8157H4.25578C4.11655 12.8157 4.00153 12.701 4.00153 12.5622V6.03056C4.00153 5.89172 4.11655 5.77702 4.25578 5.77702H27.8412C27.9804 5.77702 28.0954 5.89172 28.0954 6.03056V12.5622C28.0954 12.701 27.9804 12.8157 27.8412 12.8157H19.8381C19.6989 12.8157 19.5839 12.9304 19.5839 13.0692V30.9798C19.5839 31.5473 20.044 32.006 20.613 32.006H31.0739C31.6429 32.006 32.103 31.5473 32.103 30.9798V1.02622C32.103 0.458781 31.6429 0 31.0739 0H31.0678Z"
+				},
+				color: "#2b52fe"
+			};
+		case "github":
+			return {
+				name: "GitHub",
+				icon: {
+					viewbox: "0 0 16 16",
+					paths: "M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+				},
+				color: "#181717"
+			};
+		case "blog":
+			return {
+				name: "Blog post",
+				icon: null,
+				color: "#000000"
+			};
+		case "project":
+			return {
+				name: "New Project",
+				icon: null,
+				color: "#000000"
+			};
+		default:
+			return {
+				name: "?",
+				icon: null,
+				color: "#000000"
+			};
+	}
+}
+
+const blogPosts = await getCollection('blog');
+blogPosts.forEach((item: any) => { 
+	item.data.url = `/blog/${item.id}/`; 
+	item.data.service = "blog";
+});
+
+const projects = await getCollection('projects')
+projects.forEach((item: any) => { 
+	item.data.url = `/projects/${item.id}/`; 
+	item.data.service = "project";
+});
+
+const updates = await getCollection('updates');
+
+const topPosts = [ ...blogPosts, ...projects, ...updates ]
+						.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+						.slice(0, 12);
+
+topPosts.forEach((item: any) => { 
+	item.data.serviceDetails = getServiceDetails(item.data.service);
+});
+---
+
+<Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<h1>Howdy!</h1>
+
+	Welcome to tgorg.com! My name is Thomas Gorgolione, and I like computers. I've been around one since 5, 
+	and I particularly enjoy Web Design, Video Editing and messing with computer hardware.<br/><br/>
+
+	<h2>Interesting things I'm doing on the internet...</h2>
+
+	<div class="top-posts">
+		{topPosts.map((post, idx) =>
+			<a href={post.data.url} target={((post.data.service !== "blog") && (post.data.service !== "project")) ? "_blank" : "_self"} class={"post-item " + post.data.service} style={{ borderColor: post.data.serviceDetails.color }}>
+				<h3 style={{ backgroundColor: post.data.serviceDetails.color }}>
+					{post.data.serviceDetails.name}
+					{post.data.serviceDetails.icon && 
+						<svg viewBox={post.data.serviceDetails.icon.viewbox} aria-hidden="true" width="16" height="16">
+							<path fill-rule="evenodd" d={post.data.serviceDetails.icon.paths} fill="white" />
+						</svg>}
+				</h3>
+				{post.data.heroImage && (
+					<img src={post.data.heroImage} alt="" />
+				)}
+				<div class={"post-content" + (post.data.heroImage ? " small-font" : "")}>
+					{post.data.description}{post.data.user ? " -- " + post.data.user : ""}
+				</div>
+				<div class="date-bottom"><FormattedDate date={post.data.pubDate} /></div>
+			</a>
+		)}
+	</div>
+</Base>
+<style>
+	.top-posts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		margin-top: 30px;
+	}
+	.post-item {
+		width: calc((100% - 51px) / 3);
+		height: 300px;
+		display: flex;
+		flex-direction: column;
+		border: 2px solid #000000;
+		border-radius: 5px;
+		text-decoration: none;
+		color: #000000;
+		box-shadow: 4px 4px 3px 0px #00000022;
+		background-color: #ffffff;
+		transition: box-shadow 300ms, transform 300ms;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		transition: box-shadow none, transform none;
+	}
+	.post-item:hover {
+		box-shadow: 4px 4px 3px 0px #00000055;
+		transform: scale(1.025);
+	}
+	.post-item h3 {
+		background-color: #000000;
+		color: #ffffff;
+		padding: 2px 5px;
+		margin: 0;
+	}
+	.post-item svg {
+		float: right;
+		margin-top: 1px;
+	}
+	.post-item img {
+		object-fit: cover;
+		overflow: hidden;
+		max-height: 600px;
+		width: 100%;
+	}
+	.post-item .post-content {
+		margin: 5px;
+		flex-grow: 1;
+		font-size: large;
+	}
+	.post-item .post-content.small-font {
+		font-size: small;
+	}
+	.post-item .date-bottom {
+		background-color: #dedede;
+		text-align: center;
+		border-radius: 0 0 3px 3px;
+	}
+	@media (max-width: 950px) {
+		.post-item {
+			width: calc((100% - 27px) / 2);
+		}
+	}
+	@media (max-width: 643px) {
+		.post-item {
+			width: 100%;
+		}
+	}
+</style>

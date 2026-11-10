@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import AvatarImage from './Normal.png';
+import Image from 'astro/components/Image.astro';
+---
+
+<Base
+	title="About Me"
+	description="A little more about me... but not too much!">
+	<Image src={AvatarImage} alt="Normal" style="width: 200px; height: auto; float: right; margin-left: 20px;" />
+	My name is Thomas Gorgolione. I'm 40-something years old and live somewhere in PA with my wife and our 3 kids.<br /><br />
+	I like computers (I've been in front of one most of my life).  I am a web master/programmer/designer by trade.  I've been 
+	doing design for about 20 years and web programming for about 18 years.   I also have a B.S. in computer science from Nyack 
+	College (also named Alliance University).<br /><br />
+	Lastly, I am a Christian, which means I choose to believe and practice the teachings of Jesus Christ, which is to trust that 
+	God will mold me and change me so I can do what he wants me to do in this life -- to love Him and to love others as myself.<br /><br />
+	<a href="/etc/resume_full.pdf">Here is my resume (PDF)</a><br/><br/>
+	Bye for now<br /><br />
+	<strong>Thomas Gorgolione</strong>
+</Base>

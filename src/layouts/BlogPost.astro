@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { pathname } = Astro.url;
+
+const postId = pathname.replace(/^\/blog\/|\/$/g, '');
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+let startIndex = 0, endIndex = 0;
+
+posts.forEach((post, index) => {
+	if (post.id === postId) {
+		startIndex = Math.max(index - 3, 0);
+		endIndex = Math.min(posts.length - 1, index + 7);
+	}
+})
+---
+
+<Base title={title} description={description}>
+	<div class="post-container">
+		<article>
+			<div class="hero-image">
+				{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+			</div>
+			<div class="prose">
+				<div class="title">
+					<h1>{title}</h1>
+					<div class="date">
+						<h3 class="date"><FormattedDate date={pubDate} /></h3>
+						{updatedDate && (
+							<div class="last-updated-on">
+								Last updated on <FormattedDate date={updatedDate} />
+							</div>
+						)}
+					</div>
+				</div>
+				<slot />
+			</div>
+		</article>
+		<aside>
+			<h2>Other Posts</h2>
+			<ul>
+				{posts.slice(startIndex, endIndex).map((post) => <li>
+					{(post.id === postId) ? 
+						<span class="current-project">{post.data.title}</span>
+						:
+						<a href={`/blog/${post.id}/`}>{post.data.title}</a>}
+				</li>)}
+			</ul>
+			<hr style="margin: 30px 0"/>
+			<a href="/blog">&lt; Return to blog home</a>
+		</aside>
+	</div>
+</Base>
+<style>
+	.post-container {
+		display: flex;
+
+		h1 { margin: 0; }
+		h3.date { margin-top: 10px; }
+		aside { 
+			border-left: 1px solid #000000;
+			margin-left: 30px;
+			padding-left: 30px;
+			width: 230px; 
+			flex-shrink: 0;
+
+			h2 { 
+				margin-top: 0;
+				margin-bottom: 30px;
+			}
+			ul { 
+				padding: 0;
+
+				li { 
+					list-style: none; 
+					margin: 16px 0;
+
+					.current-project { font-weight: bold; }
+				}
+			}
+		}
+		article { 
+			flex-grow: 1;
+			max-width: 100%;
+			min-width: 0;
+
+			.hero-image img { margin-bottom: 2em; } 
+			.prose {
+				pre { white-space: pre-wrap; }
+			}
+		}
+	}
+</style>

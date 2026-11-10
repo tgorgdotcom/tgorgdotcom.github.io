@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const posts = (await getCollection('projects')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<h1>Projects</h1>
+	<section>
+		{posts.map((post) => (
+			<a href={`/projects/${post.id}/`} class="project-block">
+				<h2 class="title">{post.data.title}</h2>
+			</a>
+		))}
+	</section>
+</Base>
+<style>
+	section {
+		display: flex;
+		gap: 20px;
+		flex-wrap: wrap;
+	}
+
+	section a.project-block {
+		width: calc((100% - 44px) / 3);
+		display: block;
+		border: 1px solid #000000;
+		text-decoration: none;
+	}
+
+	section a h2 {
+		color: inherit;
+		margin: 10px 10px 50px 10px;
+	}
+
+	@media (max-width: 767px) {
+		section a.project-block {
+			width: calc((100% - 23px) / 2);
+		}
+	}
+</style>

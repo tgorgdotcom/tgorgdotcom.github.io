@@ -1,0 +1,230 @@
+---
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
+import SiteLogo from "../assets/logo_v2.png";
+---
+
+<a class="sr-only" href="#content" title="Skip to content">Skip to content</a>
+<header>
+	<video id="header-video" loop>
+		<source src="/header/headbkvideo.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+	</video>
+	<nav role="navigation">
+		<div id="title-side">
+			<a class="home-link" href="/" title={SITE_TITLE} rel="home" aria-labelledby="site-logo">
+				<img id="site-logo" title="tgorg.com" src={SiteLogo.src} />
+			</a>
+		</div>
+		<div id="main-menu">
+			<label>
+				<input type="checkbox" class="menu-toggle" />
+				<div class="menu-label">Menu</div>
+				<div id="mobilize-container">
+					<HeaderLink href="/">Home</HeaderLink>
+					<HeaderLink href="/blog">Blog</HeaderLink>
+					<HeaderLink href="/projects">Projects</HeaderLink>
+					<HeaderLink href="/about-me">About</HeaderLink>
+				</div>
+			</label>
+		</div>
+		<div id="util-side">
+			<PagefindConfig />
+			<pagefind-modal-trigger hide-shortcut class="site-search"></pagefind-modal-trigger>
+			<pagefind-modal class="site-search"></pagefind-modal>
+		</div>
+	</nav>
+</header>
+<script>
+	// from Google AI:
+	// listen for changes in the user's motion preference and adjust animations accordingly
+	const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	function handleMotionChange() {
+		if (motionQuery.matches) {
+			// disable video on reduced motion preference
+			document.getElementById('header-video')?.pause();
+		} else {
+			document.getElementById('header-video')?.play();
+		}
+	}
+
+	// Run the check once at startup
+	handleMotionChange();
+
+	// Listen for system preference updates continuously
+	motionQuery.addEventListener('change', handleMotionChange);
+</script>
+<style>
+	header {
+		margin-bottom: 40px;
+		background: #000000;
+		overflow: hidden;
+	}
+
+	header video {
+		max-width: var(--content-max-width);
+		height: var(--nav-height);
+		margin: 0px auto;
+		display: block;
+		object-fit: none;
+		object-position: bottom center;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		-webkit-transform: translateX(-50%);
+		-ms-transform: translateX(-50%);
+		-o-transform: translateX(-50%);
+		z-index: 0;
+	}
+
+	nav {
+		display: flex;
+		max-width: var(--content-max-width);
+		height: var(--nav-height);
+		align-items: flex-end;
+		margin: 0px auto;
+		overflow: visible;
+		position: relative;
+		z-index: 10;
+	}
+
+	#title-side {
+		display: block;
+		vertical-align: bottom;
+	}
+
+	#title-side .home-link {
+		display: block;
+		margin: 0;
+		padding: 0;
+	}
+
+	#site-logo {
+		width: 210px;
+		filter: drop-shadow(1px 1px 0px rgba(0, 0, 0, 1));
+		display: block;
+	}
+
+	nav pagefind-searchbox {
+		border: 2px solid #c2c2c2;
+		cursor: text;
+		width: 300px;
+		margin: 3px 0;
+	}
+
+	#main-menu {
+		display: flex;
+		flex-grow: 2;
+	}
+
+	#main-menu label { display: flex; width: 100%; }
+
+	#main-menu .menu-label { 
+		color: #ffffff;
+		text-shadow: 1px 1px 0px #000000;
+		font-family: var(--font-a750);
+		text-transform: uppercase;
+		font-size: 20px;
+        font-weight: bold;
+		padding: 10px 15px;
+		letter-spacing: 3px;
+		display: none; 	
+	}
+
+	#mobilize-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		white-space: nowrap;
+	}
+
+	.menu-toggle {
+		display: none;
+	}
+
+	.menu-toggle,
+	.menu-toggle:hover,
+	.menu-toggle:focus,
+	.menu-toggle:active {
+		white-space: nowrap;
+		color: #fff;
+		font-family: var(--font-a750);
+		border: 3px solid transparent;
+		text-transform: uppercase;
+		letter-spacing: 3px;
+		font-size: 18px;
+	}
+
+	#util-side {
+		order: 3;
+		display: table-cell;
+		vertical-align: bottom;
+		padding-bottom: 6px;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 1em;
+	}
+
+	.site-search {
+		--pf-font: Arial, Helvetica, sans-serif;
+		--pf-border-radius: 4px;
+	}
+
+	@media (max-width: 1270px) {
+		nav { margin: 0 35px; }
+	}
+
+	@media (min-width: 1069px) {
+		#utilbar { max-width: 1543px; }
+	}
+
+	@media (max-width: 999px) {
+		header video {
+			height: var(--nav-height-mobile);
+		}
+		nav {
+			align-items: center;
+			height: var(--nav-height-mobile);
+		}
+		#site-logo { width: 150px; }
+		#title-side { 
+			order: 1;
+			flex-grow: 1;
+			text-align: center;
+		}
+		#title-side .home-link {
+			display: inline-block;
+		}
+		#main-menu {
+			order: 0;
+			flex-grow: 0;
+		}
+		#main-menu .menu-label { 
+			display: block 
+		}
+		#main-menu #mobilize-container {
+			display: none;
+		}
+		#main-menu .menu-toggle:checked ~ .menu-label {
+			background-color: #fff;
+			text-shadow: none;
+			color: #000;
+		}
+		#main-menu .menu-toggle:checked ~ #mobilize-container {
+			background-color: #000;
+			display: block;
+			position: absolute;
+			margin-top: 48px;
+		}
+		#util-side {
+			padding-bottom: 0px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		nav { margin: 0 20px; }
+	}
+</style>

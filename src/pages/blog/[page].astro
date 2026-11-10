@@ -1,0 +1,73 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Pagination from '@philnash/astro-pagination';
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import truncate from 'truncate-html';
+import * as cheerio from 'cheerio';
+import { SITE_DESCRIPTION, SITE_TITLE, BLOG_EXCERPT_LENGTH, PAGED_ITEM_LENGTH } from '../../consts';
+
+
+
+export const getStaticPaths = await (async ({ paginate }) => {
+    const posts = (await getCollection('blog')).sort(
+        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+    );
+    return paginate(posts, { pageSize: PAGED_ITEM_LENGTH });
+}) satisfies GetStaticPaths;
+
+// All paginated data is passed on the "page" prop
+const { page } = Astro.props;
+
+const renderedPosts = await Promise.all(page.data.map(async (post) => { 
+	let isTruncated: boolean = false;
+	let postContent = "";
+
+	await render(post);
+	if (post.rendered) {
+		if (cheerio.load(post.rendered.html).text().length > BLOG_EXCERPT_LENGTH) {
+			let tempHTML = post.rendered.html;
+			postContent = truncate(tempHTML, { length: BLOG_EXCERPT_LENGTH, reserveLastWord: true, keepWhitespaces: true });
+			isTruncated = true;
+		}
+		else {
+			postContent = post.rendered.html;
+		}
+	}
+	
+	return { post, postContent, isTruncated };
+}))
+---
+
+<Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="article-list">
+		{renderedPosts.map(({ post, postContent, isTruncated }) => (
+			<article>
+				{post.data.heroImage && (
+					<Image width={720} height={360} src={post.data.heroImage} alt="" />
+				)}
+				<a href={"/blog/" + post.id}><h1 class="title">{post.data.title}</h1></a>
+				<h3 class="date"><FormattedDate date={post.data.pubDate} /></h3>
+				<p>
+					<div set:html={postContent}></div>
+					{isTruncated && <div><a href={"/blog/" + post.id}>Read More</a></div>}
+				</p>
+			</article>
+		))}
+	</section>
+	<div>
+		<Pagination page={page} urlPattern={"/blog/{}"}  />
+	</div>
+</Base>
+<style>
+	section.article-list {
+		h1 { color: initial; margin: 0; }
+		h3.date { margin-top: 10px; }
+		a { text-decoration: none; }
+		a:hover h1 { color: #404040 }
+		article { margin: 0 0 4.2em 0; }
+		article img { margin-bottom: 2em; }
+	}
+</style>

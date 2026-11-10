@@ -1,0 +1,16 @@
+---
+title: 'Added some stuff...'
+description: 'Added some stuff...'
+pubDate: 'Jul 15 2005'
+author: 'Thomas Gorgolione'
+---
+
+Well, I've added a projects page dedicated to the ACM Nyack College Chapter Website I'm working on, as well as adding more to the Spiritual Formation Video.
+
+As for me, I've just finished a week of Vacation Bible School (or VBS, which is a five day event where kids come and learn about the Bible, etc.), which means another round of hard-hitting intense all out video editing for the VBS closing ceremony that was yesterday (we have the closing ceremony a day before the last day of VBS). After the usual rush to edit the video before the ceremony began, I made an attempt to chill out from the intense pressure of getting to Budd Lake Chapel, where the ceremony is held, on time. I didn't go too crazy on my trip (in fact God tried to remind me not to worry when "God is in Control" by Twila Paris started playing from the radio when I started my car). Thankfully they were able to stall until my arrival by having a VBS participant talk about the mission that kids gave money to each day.
+
+The ceremony, even though at times seems to "hiccup" a lot, proved to be a great experience. The computer I was using to show the slides held up quite well, execept for the fact that I displayed the wrong memory verse on the screen with no hope of rectifying it. However it was the video itself that seemed to be the worst part. On the technical end of things, I created four different parts of video that I figured (to save time) would work by playing each part of video one by one. However what I didn't know (or remember) was that my computer choked on the file format for the video. Needless to say I was getting choppy video and sound while the video was playing. Within seconds, I stopped the video, and the ceremony continued on. Thankfully I was able to re-render the entire video as one sequence in a better format on the fly, during the ceremony. Unfortunately, however, we had to stall the crowd big time (We had to get them to have refreshments, then come back to the video)
+
+As much as I would like to say that this all was a mess, God was still in control. He made everything right. First off, the Chapel was really hot that night, it might have been good for them to have refreshments before the video. As it turns out, not many (or not any) people left in-between refreshments and the video. Secondly, I tried to make an attempt to save the file again with a better file format the next day, using the same program I was using during the ceremony, and for some reason it's been giving me errors. Whether God was preventing me from getting errors during most of the rendering process (for there was an error at the tail end, yet the video was still intact), or whether it was just the way I was saving it is still not known, but it worked. The lights were dimmed, and I played the finished product. In the end the people liked it, and God showed His greatness again.
+
+I'd like to conclude this with what God has been telling me and reminding me for a great while; that God uses the imperfect, or at least our view of imperfectness, for His true perfectness. We seem to fail, and we see our shortcomings, but over all that there is a God who works it all for good.

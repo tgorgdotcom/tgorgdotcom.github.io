@@ -1,0 +1,83 @@
+---
+import type { Page } from 'astro';
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import Pagination from '@philnash/astro-pagination';
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import truncate from 'truncate-html';
+import * as cheerio from 'cheerio';
+import { SITE_DESCRIPTION, SITE_TITLE, BLOG_EXCERPT_LENGTH, PAGED_ITEM_LENGTH } from '../../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const renderedPosts = await Promise.all(posts.slice(0, PAGED_ITEM_LENGTH).map(async (post) => { 
+	let isTruncated: boolean = false;
+	let postContent = "";
+
+	await render(post);
+	if (post.rendered) {
+		if (cheerio.load(post.rendered.html).text().length > BLOG_EXCERPT_LENGTH) {
+			let tempHTML = post.rendered.html;
+			postContent = truncate(tempHTML, { length: BLOG_EXCERPT_LENGTH, reserveLastWord: true, keepWhitespaces: true });
+			isTruncated = true;
+		}
+		else {
+			postContent = post.rendered.html;
+		}
+	}
+	
+	return { post, postContent, isTruncated };
+}))
+
+// since this is the index, it doesn't use the page object, so we'll create a emulated one
+const fauxPage: Page = {
+	data: [],
+	currentPage: 1,
+	size: PAGED_ITEM_LENGTH,
+	lastPage: Math.ceil(posts.length / PAGED_ITEM_LENGTH),
+	url: {
+		current: '/blog/1',
+		prev: undefined,
+		next: '/blog/2',
+		first: '/blog/1',
+		last: '/blog/' + Math.ceil(posts.length / PAGED_ITEM_LENGTH),
+	},
+	start: 0,
+	end: 2,
+	total: posts.length
+};
+---
+
+<Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="article-list">
+		{renderedPosts.map(({ post, postContent, isTruncated }) => (
+			<article>
+				{post.data.heroImage && (
+					<Image width={720} height={360} src={post.data.heroImage} alt="" />
+				)}
+				<a href={"/blog/" + post.id}><h1 class="title">{post.data.title}</h1></a>
+				<h3 class="date"><FormattedDate date={post.data.pubDate} /></h3>
+				<p>
+					<div set:html={postContent}></div>
+					{isTruncated && <div><a href={"/blog/" + post.id}>Read More</a></div>}
+				</p>
+			</article>
+		))}
+	</section>
+	{(posts.length > PAGED_ITEM_LENGTH) && <div>
+		<Pagination page={fauxPage} urlPattern={"/blog/{}"}  />
+	</div>}
+</Base>
+<style>
+	section.article-list {
+		h1 { color: initial; margin: 0; }
+		h3.date { margin-top: 10px; }
+		a { text-decoration: none; }
+		a:hover h1 { color: #404040 }
+		article { margin: 0 0 4.2em 0; }
+		article img { margin-bottom: 2em; }
+	}
+</style>
